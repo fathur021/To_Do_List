@@ -12,6 +12,9 @@ app.use(cors());
 
 app.use(express.json());
 
+
+app.use("/api/auth", require("./router/authRouter"));
+app.use("/api/matakuliah", require("./router/matkulRoute"));
 // Route sederhana untuk mengecek apakah server berjalan
 app.get("/", (req, res) => {
     res.send("Server is running");
