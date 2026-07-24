@@ -1,3 +1,4 @@
+const matakuliah = require("../models/matakuliah");
 const Matakuliah = require("../models/matakuliah");
 const { validateMatkul } = require("../validators/matakuliahValidator");
 
@@ -46,32 +47,68 @@ const getMatkul = async (req, res) => {
   }
 };
 
-const updateMatkul = async(req,res)=>{
-    try {
-        const {error, value} = validateMatkul(req.body);
-        if(error){
-            return res.status(400).json({
-                success:false,
-                message: error.details[0].message
-            })
-        }
-        const matkul = await Matakuliah.findOneAndUpdate(
-            { _id: req.params.id, userId: req.user._id },
-            value,
-            { new: true }
-        )
+const updateMatkul = async (req, res) => {
+  try {
+    const { error, value } = validateMatkul(req.body);
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        message: error.details[0].message,
+      });
+    }
+    const matkul = await Matakuliah.findOneAndUpdate(
+      { _id: req.params.id, userId: req.user._id },
+      value,
+      { new: true },
+    );
 
+    if (!matkul) {
+      return res.status(404).json({
+        success: false,
+        message: "Matkul tidak di temukan",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Berhasil Update Mata Kuliah",
+      data: matkul,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+};
+
+const deleteMatkul = async (req, res) => {
+    try {
+        const matkul = await Matakuliah.findOneAndDelete({_id:req.params.id, userId:req.user._id});
         if(!matkul){
             return res.status(404).json({
                 success:false,
-                message:"Matkul tidak di temukan"
+                message:"Mata kuliah tidak ditemukan"
             })
-        }
+        };
+        return res.status(200).json({
+            success:true,
+            message:"Berhasil menghapus Matakuliah"
+        })
     } catch (error) {
-        
+        console.error(error)
+        return res.status(500).json({
+            success:false,
+            message:"Server Error"
+        })
     }
-}
+};
+
+
 module.exports = {
   createMatkul,
   getMatkul,
+  updateMatkul,
+  deleteMatkul,
 };

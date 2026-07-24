@@ -109,7 +109,7 @@ const login = async (req, res) => {
         const accessToken = jwt.sign(
             { id: user._id },
             process.env.JWT_SECRET,
-            { expiresIn: "15m" }
+            { expiresIn: "60m" }
         );
 
         // ===== 7. BUAT REFRESH TOKEN (7 hari) =====

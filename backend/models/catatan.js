@@ -6,6 +6,11 @@ const catatanSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
+  matkulId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Matakuliah',
+    required: true
+  },
   judul: {
     type: String,
     required: true,
@@ -17,10 +22,10 @@ const catatanSchema = new mongoose.Schema({
     trim: true,
     maxlength: 500
   },
-  kategori: {
+  warna: {
     type: String,
     trim: true,
-    default: 'Umum'
+    default: '#ffffff'
   },
   prioritas: {
     type: String,
